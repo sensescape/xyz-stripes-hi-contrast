@@ -1314,7 +1314,7 @@ styles:
 
     stripes-green-angle:
         base: polygons
-        mix: [functions-aastep, pallete, patterns-stripes, space-screen]
+        mix: [functions-aastep, patterns-stripes, space-screen]
         shaders:
             defines:
                 STRIPES_WIDTH: 0.5
