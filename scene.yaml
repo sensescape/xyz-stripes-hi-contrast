@@ -773,67 +773,67 @@ layers:
                         # color: red
                         visible: true
 
-        # conservation:
-        #     filter:
-        #         $zoom: { min: 4 }
-        #         kind: [protected_area, nature_reserve, national_park]
-        #         not: { protect_class: ['2','3','5']}
-        #     draw:
-        #         polygons:
-        #             style: zigzag-green
-        #             color: [0.560,0.560,0.560]
-        #             # style: stripes-hatch
-        #             # color: [0.750,0.750,0.750]
-        #             visible: true
+        conservation:
+            filter:
+                $zoom: { min: 4 }
+                kind: [protected_area, nature_reserve, national_park]
+                not: { protect_class: ['2','3','5']}
+            draw:
+                polygons:
+                    style: zigzag-green
+                    color: [0.560,0.560,0.560]
+                    # style: stripes-hatch
+                    # color: [0.750,0.750,0.750]
+                    visible: true
 
-        # national_forest_level_6:
-        #     filter:
-        #         all:
-        #             - kind: forest
-        #         any:
-        #             - protect_class: ['6']
-        #             - operator: ['United States Forest Service']
-        #     draw:
-        #         polygons:
-        #             style: stripes-green-angle
-        #             color: [0.580,0.580,0.580]
-        #             visible: true
+        national_forest_level_6:
+            filter:
+                all:
+                    - kind: forest
+                any:
+                    - protect_class: ['6']
+                    - operator: ['United States Forest Service']
+            draw:
+                polygons:
+                    style: stripes-green-angle
+                    color: [0.580,0.580,0.580]
+                    visible: true
 
-        # forest-landcover:
-        #     filter: { kind: [forest, natural_forest, wood, natural_wood, natural_park], $zoom: { min: 10 }, not: { operator: "United States Forest Service" } }
-        #     draw:
-        #         polygons:
-        #             style: stripes-green-horizontal
-        #             color: [0.540,0.540,0.540]
-        #             visible: true
+        forest-landcover:
+            filter: { kind: [forest, natural_forest, wood, natural_wood, natural_park], $zoom: { min: 10 }, not: { operator: "United States Forest Service" } }
+            draw:
+                polygons:
+                    style: stripes-green-horizontal
+                    color: [0.540,0.540,0.540]
+                    visible: true
 
-        # parks-and-national-forests-not-national-park:
-        #     filter:
-        #         all:
-        #             - $zoom: { min: 4 }
-        #             - kind: [park, national_park]
-        #         any:
-        #             - not: { operator: [ "United States National Park Service", "United States Forest Service" ] }
-        #             - not: { protect_class: ['2','3','5','6'] }
-        #     # default for national forests and more?
-        #     draw:
-        #         polygons:
-        #             # style: zigzag-green
-        #             # color: [0.500,0.500,0.500]
-        #             style: diagonal-stripes-weave
-        #             color: [0.980,0.980,0.980]
-        #             visible: true
-        #     national_park:
-        #         #filter: function() { return feature.name && (feature.name.indexOf('National Park') > -1); }
-        #         filter:
-        #             all:
-        #                 - kind: national_park
-        #                 - not: [ protect_class: ['2','3','5','6'], operator: [ "United States National Park Service"] ]
-        #         draw:
-        #             polygons:
-        #                 style: diagonal-stripes-weave
-        #                 color: [0.980,0.980,0.980]
-        #                 visible: true
+        parks-and-national-forests-not-national-park:
+            filter:
+                all:
+                    - $zoom: { min: 4 }
+                    - kind: [park, national_park]
+                any:
+                    - not: { operator: [ "United States National Park Service", "United States Forest Service" ] }
+                    - not: { protect_class: ['2','3','5','6'] }
+            # default for national forests and more?
+            draw:
+                polygons:
+                    # style: zigzag-green
+                    # color: [0.500,0.500,0.500]
+                    style: diagonal-stripes-weave
+                    color: [0.980,0.980,0.980]
+                    visible: true
+            national_park:
+                #filter: function() { return feature.name && (feature.name.indexOf('National Park') > -1); }
+                filter:
+                    all:
+                        - kind: national_park
+                        - not: [ protect_class: ['2','3','5','6'], operator: [ "United States National Park Service"] ]
+                draw:
+                    polygons:
+                        style: diagonal-stripes-weave
+                        color: [0.980,0.980,0.980]
+                        visible: true
 
     buildings:
         data: { source: mapzen, layer: buildings }
