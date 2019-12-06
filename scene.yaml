@@ -751,7 +751,11 @@ layers:
             draw:
                 polygons:
                     style: stripes-green-angle
+                    # style: stripes-overlap-3
+                    # style: stripes-overlap-horizontal-vertical
+                    # style: stripes-overlap-diagonal
                     color: [0.580,0.580,0.580]
+                    # color: red
                     visible: true
             us_national_park:
                 # yosemite national park, death valley national park, grand canyon national park
@@ -762,70 +766,74 @@ layers:
                 draw:
                     polygons:
                         style: stripes-green-angle
+                        # style: stripes-overlap-3
+                        # style: stripes-overlap-horizontal-vertical
+                        # style: stripes-overlap-diagonal
                         color: [0.580,0.580,0.580]
+                        # color: red
                         visible: true
 
-        conservation:
-            filter:
-                $zoom: { min: 4 }
-                kind: [protected_area, nature_reserve, national_park]
-                not: { protect_class: ['2','3','5']}
-            draw:
-                polygons:
-                    style: zigzag-green
-                    color: [0.560,0.560,0.560]
-                    # style: stripes-hatch
-                    # color: [0.750,0.750,0.750]
-                    visible: true
+        # conservation:
+        #     filter:
+        #         $zoom: { min: 4 }
+        #         kind: [protected_area, nature_reserve, national_park]
+        #         not: { protect_class: ['2','3','5']}
+        #     draw:
+        #         polygons:
+        #             style: zigzag-green
+        #             color: [0.560,0.560,0.560]
+        #             # style: stripes-hatch
+        #             # color: [0.750,0.750,0.750]
+        #             visible: true
 
-        national_forest_level_6:
-            filter:
-                all:
-                    - kind: forest
-                any:
-                    - protect_class: ['6']
-                    - operator: ['United States Forest Service']
-            draw:
-                polygons:
-                    style: stripes-green-angle
-                    color: [0.580,0.580,0.580]
-                    visible: true
+        # national_forest_level_6:
+        #     filter:
+        #         all:
+        #             - kind: forest
+        #         any:
+        #             - protect_class: ['6']
+        #             - operator: ['United States Forest Service']
+        #     draw:
+        #         polygons:
+        #             style: stripes-green-angle
+        #             color: [0.580,0.580,0.580]
+        #             visible: true
 
-        forest-landcover:
-            filter: { kind: [forest, natural_forest, wood, natural_wood, natural_park], $zoom: { min: 10 }, not: { operator: "United States Forest Service" } }
-            draw:
-                polygons:
-                    style: stripes-green-horizontal
-                    color: [0.540,0.540,0.540]
-                    visible: true
+        # forest-landcover:
+        #     filter: { kind: [forest, natural_forest, wood, natural_wood, natural_park], $zoom: { min: 10 }, not: { operator: "United States Forest Service" } }
+        #     draw:
+        #         polygons:
+        #             style: stripes-green-horizontal
+        #             color: [0.540,0.540,0.540]
+        #             visible: true
 
-        parks-and-national-forests-not-national-park:
-            filter:
-                all:
-                    - $zoom: { min: 4 }
-                    - kind: [park, national_park]
-                any:
-                    - not: { operator: [ "United States National Park Service", "United States Forest Service" ] }
-                    - not: { protect_class: ['2','3','5','6'] }
-            # default for national forests and more?
-            draw:
-                polygons:
-                    # style: zigzag-green
-                    # color: [0.500,0.500,0.500]
-                    style: diagonal-stripes-weave
-                    color: [0.980,0.980,0.980]
-                    visible: true
-            national_park:
-                #filter: function() { return feature.name && (feature.name.indexOf('National Park') > -1); }
-                filter:
-                    all:
-                        - kind: national_park
-                        - not: [ protect_class: ['2','3','5','6'], operator: [ "United States National Park Service"] ]
-                draw:
-                    polygons:
-                        style: diagonal-stripes-weave
-                        color: [0.980,0.980,0.980]
-                        visible: true
+        # parks-and-national-forests-not-national-park:
+        #     filter:
+        #         all:
+        #             - $zoom: { min: 4 }
+        #             - kind: [park, national_park]
+        #         any:
+        #             - not: { operator: [ "United States National Park Service", "United States Forest Service" ] }
+        #             - not: { protect_class: ['2','3','5','6'] }
+        #     # default for national forests and more?
+        #     draw:
+        #         polygons:
+        #             # style: zigzag-green
+        #             # color: [0.500,0.500,0.500]
+        #             style: diagonal-stripes-weave
+        #             color: [0.980,0.980,0.980]
+        #             visible: true
+        #     national_park:
+        #         #filter: function() { return feature.name && (feature.name.indexOf('National Park') > -1); }
+        #         filter:
+        #             all:
+        #                 - kind: national_park
+        #                 - not: [ protect_class: ['2','3','5','6'], operator: [ "United States National Park Service"] ]
+        #         draw:
+        #             polygons:
+        #                 style: diagonal-stripes-weave
+        #                 color: [0.980,0.980,0.980]
+        #                 visible: true
 
     buildings:
         data: { source: mapzen, layer: buildings }
@@ -1256,6 +1264,73 @@ styles:
                     color.rgb = mix(color.rgb,vec3(0.940),stripes(st*200.,
                                         STRIPES_WIDTH,
                                         STRIPES_ANGLE));
+
+    stripes-overlap-horizontal-vertical:
+        base: polygons
+        mix: [functions-aastep, pallete, patterns-stripes, space-screen]
+        blend: inlay
+        shaders:
+            defines:
+                STRIPES_WIDTH: .5
+                STRIPES_WIDTH2: .5
+                STRIPES_ALPHA: 1.0
+                STRIPES_SCALE: 2.
+                STRIPES_ANGLE: 1.570796325
+                STRIPES_ANGLE2: 3.14159265
+            blocks:
+                color: |
+                    vec2 st = getScreenNonStretchCoords();
+                    color = mix(color,mix(color,vec4(0.950,0.950,0.950,0.5),stripes(st*50.,
+                                        STRIPES_WIDTH2,
+                                        STRIPES_ANGLE)),stripes(st*50.,
+                                        STRIPES_WIDTH,
+                                        STRIPES_ANGLE2));
+
+    stripes-overlap-diagonal:
+        base: polygons
+        mix: [functions-aastep, pallete, patterns-stripes, space-screen]
+        blend: inlay
+        shaders:
+            defines:
+                STRIPES_WIDTH: .5
+                STRIPES_WIDTH2: .5
+                STRIPES_ALPHA: 1.0
+                STRIPES_SCALE: 2.
+                STRIPES_ANGLE: 0.7853981634
+                STRIPES_ANGLE2: -0.7853981634
+            blocks:
+                color: |
+                    vec2 st = getScreenNonStretchCoords();
+                    color = mix(color,mix(color,vec4(0.950,0.950,0.950,0.5),stripes(st*50.,
+                                        STRIPES_WIDTH2,
+                                        STRIPES_ANGLE)),stripes(st*50.,
+                                        STRIPES_WIDTH,
+                                        STRIPES_ANGLE2));
+
+    stripes-overlap-3:
+        base: polygons
+        mix: [functions-aastep, pallete, patterns-stripes, space-screen]
+        blend: inlay
+        shaders:
+            defines:
+                STRIPES_WIDTH: .5
+                STRIPES_WIDTH2: .5
+                STRIPES_WIDTH3: .5
+                STRIPES_ALPHA: 1.0
+                STRIPES_SCALE: 2.
+                STRIPES_ANGLE: 0.7853981634
+                STRIPES_ANGLE2: -0.7853981634
+                STRIPES_ANGLE3: 3.14159265
+            blocks:
+                color: |
+                    vec2 st = getScreenNonStretchCoords();
+                    color = mix(color,mix(color,mix(color,vec4(0.950,0.950,0.950,0.5),stripes(st*50.,
+                                        STRIPES_WIDTH3,
+                                        STRIPES_ANGLE)),stripes(st*50.,
+                                        STRIPES_WIDTH2,
+                                        STRIPES_ANGLE2)),stripes(st*50.,
+                                        STRIPES_WIDTH,
+                                        STRIPES_ANGLE3));
 
     zigzag-green:
         base: polygons
